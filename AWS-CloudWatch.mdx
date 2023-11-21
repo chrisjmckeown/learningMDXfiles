@@ -1,0 +1,65 @@
+---
+title: 'CloudWatch'
+excerpt: 'Learnings from AWS CloudWatch, tips and tricks.'
+date: '2023-10-17'
+source: 'https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html'
+author:
+    name: Chris McKeown
+tags: ['AWS', 'CloudWatch']
+---
+
+# CloudWatch - Log Insights
+
+CloudWatch Logs Insights enables you to interactively search and analyze your log data in Amazon CloudWatch Logs. You can perform queries to help you more efficiently and effectively respond to operational issues. If an issue occurs, you can use CloudWatch Logs Insights to identify potential causes and validate deployed fixes.
+
+> [AWS CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html)
+
+## To filter by @message
+
+Filter all logs by message that contains **info**
+
+```
+fields @timestamp, @message, @logStream, @log
+| filter @message like 'info'
+| sort @timestamp desc
+| limit 20
+```
+
+## To filter by @message parsing the message
+
+Raw CloudWatch output from full search
+
+```
+Field	            Value
+@ingestionTime	  1697505858337
+@log	            some log
+@logStream	      possibly ec2 name
+@message          {
+                    "level": "info",
+                    "message": "the very important message"
+                  }
+@timestamp	      1697505855143
+```
+
+Applied filter
+
+```
+fields @timestamp, @message, @logStream, @log
+| parse @message '"level": "*"' as levelOut, messageOut
+| filter levelOut = 'info' and messageOut like 'important'
+| sort @timestamp desc
+| limit 20
+```
+
+where:
+
+-   fields: to show specific fields in query results.
+-   parse: to extract data from a log field and create an extracted field that you can process in your query.
+-   filter: to get log events that match one or more conditions.
+-   sort: display log events in ascending (asc) or descending (desc) order by a specified field.
+-   limit: specify the number of log events that you want your query to return.
+
+Note:
+
+-   if @message {"level": "error","message": "an error message"} the double quotes need to be used to wrap the variable in the query, wrapping in single quote was yield no results.
+-   getting second item out of message was not working, so messageOut above takes the remainder

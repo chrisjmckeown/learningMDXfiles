@@ -1,0 +1,177 @@
+---
+title: 'Reactapp to AWS S3'
+excerpt: 'Deploying a static React app to AWS S3.'
+date: '2022-06-22'
+source: 'https://www.youtube.com/watch?v=mls8tiiI3uc&t=416s'
+author:
+    name: Chris McKeown
+tags: ['React', 'AWS', 'S3', 'Route53', 'CloudFront', 'Certificate manager']
+---
+
+<h1 align="center">Reactapp to AWS S3</h1>
+
+# Workflow
+
+| Step                           | Complete |
+| :----------------------------- | :------: |
+| Create React App               |   [ ]    |
+| Create a S3 bucket             |   [ ]    |
+| Set up Route53                 |   [ ]    |
+| Set up HTTPS Certificate       |   [ ]    |
+| Create Cloudfront distribution |   [ ]    |
+| Modify S3 bucket               |   [ ]    |
+| Modify Route53                 |   [ ]    |
+
+# React a React app
+
+-   npx create-react-app demoapp
+-   npm run start - to test the app
+-   npm run build - to bundle files to a static build folder
+
+# Create a S3 bucket
+
+-   Create a bucket
+    -   name with www: www.{your-registered-domain}
+-   Create a second bucket
+    -   name without www: {your-registered-domain}
+-   Go to the www folder
+    -   Upload the static files within the build folder created when running **npm run build**
+    -   Go to **Permissions** tab
+        -   **Block public access (bucket settings)** -> Edit
+            -   Untick **Block all public access**, save and confirm
+        -   **Bucket policy** -> Edit
+            -   Paste the below changing the **Resource**
+                ```
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "PublicReadGetObject",
+                            "Effect": "Allow",
+                            "Principal": "*",
+                            "Action": [
+                                "s3:GetObject"
+                            ],
+                            "Resource": [
+                                "arn:aws:s3:::Bucket-Name/*"
+                            ]
+                        }
+                    ]
+                }
+                ```
+    -   Got to **Properties** tab
+        -   **Static website hosting** -> Edit
+            -   _Enable_
+            -   **Index document** -> index.html
+            -   Save changes
+-   Go to the non www folder
+    -   Got to **Properties** tab
+        -   **Static website hosting** -> Edit
+            -   _Enable_
+            -   **Hosting type** -> Redirect requests for an object
+            -   **Host name** -> www.{your-registered-domain}
+            -   **Protocol - Optional** -> http
+            -   Save changes
+-   Go to the www folder
+    -   Got to **Properties** tab
+        -   **Static website hosting**
+            -   _Bucket website endpoint_ should list a url to view the website
+
+# Set up Route53
+
+-   Go to Route53
+-   Create a registered Domain one does not exist
+-   Go to **Hosted Zones**
+    -   Select a Domain
+    -   Select **Create record**
+    -   _Switch to wizard_ - creating simple routing
+    -   Select **Simple routing** -> Next
+        -   Select **Define a simple record** record 1
+            -   **Record name** -> enter any subdomain www.
+            -   **Value/Route traffic to**
+                -   _Choose endpoint_ -> Alias to S3 website endpoint
+                -   _Enter region_
+                -   _Enter S3 endpoint_ ->
+        -   Select **Define a simple record** record 2
+            -   Same settings as above minus www.
+    -   **Create records**
+    -   **NOTE** can take some time for the record to propogate, to view your website...
+
+# Set up HTTPS Certificate
+
+-   Go to **Certificate manager**
+-   **NOTE**: must be in N.Virginia (us-east-1) zone for this to work with Cloudfront
+-   **Request certificate**
+    -   Request a public certificate - > Next
+    -   **Domain names** -> enter full name www.{your-registered-domain}
+    -   Add another Domain, one without www
+    -   **Select validation method**
+        -   DNS validation - recommended -> Request
+-   Refresh the page to see the new Certificate
+-   Select the certificate
+    -   Select **Create records in Route 53** -> Create records
+
+# Create Cloudfront distribution
+
+-   Go to **Cloudfront**
+-   **Create distribution** for www.
+
+    -   Go to S3 and copy the endpoint from _Properties_ -> _Static website hosting_
+    -   Paste into **Origin domain**
+    -   **Default cache behavior**
+        -   **Viewer**
+            -   **Viewer protocol policy** -> Redirect HTTP to HTTPS
+    -   **Settings**
+        -   **Alternate domain name (CNAME) - optional**
+            -   Add the full domain www.{your-registered-domain}
+    -   **Custom SSL certificate - optional**
+        -   Select the certificate created above.
+        -   **NOTE**: certificate might take some time to propogate, and must have been created in US East (N. Virginia) Region (us-east-1).
+        -   Create distribution
+
+-   **Create distribution** for non www.
+    -   Go to S3 and copy the endpoint from _Properties_ -> _Static website hosting_
+    -   Paste into **Origin domain**
+    -   **Default cache behavior**
+        -   **Viewer**
+            -   **Viewer protocol policy** -> Redirect HTTP to HTTPS
+    -   **Settings**
+        -   **Alternate domain name (CNAME) - optional**
+            -   Add the full domain {your-registered-domain}
+    -   **Custom SSL certificate - optional**
+        -   Select the certificate created above.
+        -   **NOTE**: certificate might take some time to propogate, and must have been created in US East (N. Virginia) Region (us-east-1).
+        -   Create distribution
+
+# Modify S3 bucket
+
+-   Go to the non www bucket
+-   Got to **Properties** tab
+    -   **Static website hosting** -> Edit
+        -   Change the Protocol to **https**
+        -   Save changes
+
+# Modify Route53
+
+-   Select the www Record
+
+    -   Edit
+    -   Change _Choose endpoint_ from _Alias to S3 website endpoint_ to _Alias to CloudFront distribution_
+    -   Change _Choose distribution_ to the item in the list
+
+-   Select the non www Record
+    -   Edit
+    -   Change _Choose endpoint_ from _Alias to S3 website endpoint_ to _Alias to CloudFront distribution_
+    -   Change _Choose distribution_ to the item in the list
+
+# Cloudfront reset
+
+-   Go to **Cloudfront**
+-   Select a distribution
+-   Go to **Invalidations** -> _Create invalidation_
+-   Enter
+    ```
+    /**/*
+    ```
+-   Which is every subdirectory and file within that subdirectory
+-   Then click Create invalidation
