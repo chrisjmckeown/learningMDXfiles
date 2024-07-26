@@ -1,0 +1,112 @@
+---
+title: "Prisma"
+excerpt: "Adding Prisma to a Nx -> Nextjs Project and key commands."
+date: "2024-01-09"
+source:
+  [
+    "https://www.youtube.com/watch?v=_ER9jHiylAo&t=433s",
+    "https://ethanmick.com/how-to-set-up-prisma-with-next-js-postgres/",
+  ]
+author:
+  name: Chris McKeown
+tags: ["Prisma", "Nextjs", "Nx"]
+---
+
+I have a Nx monorepo with an App I wanted to add a Prisma schema too at the app level, not root
+
+# Adding Prisma to the project
+
+- `yarn add -D prisma` only required in development or in CI/CD pipeline to manage the DB, i.e. generating types, migrations, push to DB etc.
+- `yarn add @primsma/client` allows you to connect to your DB in code.
+- `yarn add @next-auth/prisma-adapter` an adaptor for NextAuth and Prisma to manage users, see (Prisma Adaptor){https://next-auth.js.org/v3/adapters/prisma}
+
+- CD to app and `npx prisma init` to initialise and create base folders and files.
+
+- To use .env.local add `"migrate": "dotenv -e .env.local -- npx prisma migrate dev"` to package.json
+- If using standard .env, to migrate run `npx migrate dev --name init` where init is the first migration.
+
+- Alter package.json build script, so when deploying to vercel etc. the types are generated in node_modules `"build": "prisma generate && next build",`
+
+- To the DB `npx push appName`
+
+- To seed the DB:
+
+  - install `ts-node`
+  - Add below to package.json
+    ```
+    "prisma": {
+        "seed": "ts-node --compiler-options {\"module\":\"commonjs\"} ./prisma/seed.ts"
+    },
+    ```
+  - Add a seed file
+
+    ```
+    import { PrismaClient } from '@prisma/client'
+
+    const prisma = new PrismaClient()
+
+    async function main() {
+    const user = await prisma.user.upsert({
+        where: { email: 'test@test.com' },
+        update: {},
+        create: {
+        email: 'test@test.com',
+        name: 'Test User',
+            password: `$2y$12$GBfcgD6XwaMferSOdYGiduw3Awuo95QAPhxFE0oNJ.Ds8qj3pzEZy` //password
+        },
+    })
+    console.log({ user })
+    }
+    main()
+    .then(() => prisma.$disconnect())
+    .catch(async (e) => {
+        console.error(e)
+        await prisma.$disconnect()
+        process.exit(1)
+    })
+    ```
+
+  - To seed copy .env.local and rename to .env, then run `npx prisma db seed`, if successful the user will be returned
+
+- To view data run `npx prisma studio`. Prisma Studio should start on http://localhost:5555
+
+## If using monorepo Nx project_json
+
+- Add Prisma Commands to **project.json** file
+
+- Each time a package is installed or the repo is pulled or building on vercel run `nx generate-types appName` to generate the types in node_modules
+
+- Add Prisma commands
+
+```
+        "prisma": {
+            "command": "prisma",
+            "options": {
+                "cwd": "apps/appName"
+            }
+        },
+        "push": {
+            "command": "prisma db push",
+            "options": {
+                "cwd": "apps/appName"
+            }
+        },
+        "migrate": {
+            "command": "prisma migrate dev",
+            "options": {
+                "cwd": "apps/appName"
+            }
+        },
+        "generate-types": {
+            "command": "prisma generate",
+            "options": {
+                "cwd": "apps/appName"
+            }
+        },
+        "prisma-studio": {
+            "command": "prisma studio",
+            "options": {
+                "cwd": "apps/appName"
+            }
+        }
+```

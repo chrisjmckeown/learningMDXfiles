@@ -1,0 +1,38 @@
+---
+title: "tmux"
+excerpt: "Learnings from tmux, tips and tricks."
+date: "2023-12-12"
+source: []
+author:
+  name: Chris McKeown
+tags: ["tmux", "general", "commandline"]
+---
+
+# Command line
+
+- `tmux` opens a tmux session
+- `exit` to exit a panel
+- `tmux ls` to view tmux sessions
+- `tmux attach -t 0` to attach to a session with name 0
+- `tmux rename-session -t 0 worker3` to rename a session
+- `ctrl + b` then `shift %` to create a horizontal panel. Need shift...
+- `ctrl + b` then `shift "` to create a verticle panel. Need shift...
+- `tmux new -s myname` start new with session name
+- `tmux kill-session -t myname` kill session
+- `tmux ls | grep : | cut -d. -f1 | awk '{print substr($1, 0, length($1)-1)}' | xargs kill` Kill all the tmux sessions:
+- `tmux a` (or at, or attach)
+- `tmux a -t myname` attach to named
+- `ctrl + b` to exit a session without killing it
+
+[tmuxcheatsheet](https://tmuxcheatsheet.com/)
+
+# To alter hotkeys
+
+- edit/create ~.tmux.conf
+- add similar to below for any [commend](https://tmuxcheatsheet.com/)
+
+```
+bind-key -n h split-window -h
+bind-key -n v split-window -v
+bind-key -n C-a send-prefix
+```

@@ -1,0 +1,32 @@
+---
+title: "Yarn"
+excerpt: "Learnings from Yarn."
+date: "2022-02-14"
+source: ["https://phoenixnap.com/kb/how-to-install-yarn-ubuntu"]
+author:
+  name: Chris McKeown
+tags: ["cli", "Yarn"]
+---
+
+# Upgrade Yarn from Classic to Latest
+
+To get Yarn output like ➤ YN0000: upgrade the project from Classic to Latest
+Follow the below procedure to upgrade Yarn from the classic to the latest version:
+
+1. Run the npm install command to ensure that the classic Yarn is updated to the latest 1.x version:
+
+```
+sudo npm install -g yarn
+```
+
+2. Switch to the modern Yarn version by typing:
+
+```
+yarn set version berry
+```
+
+2 new files will be added to the project, **_.yarnrc.yml_** & **_.yarn/releases/yarn-version.cjs_**, and package.json will be updated with:
+
+```
+"packageManager": "yarn@version"
+```

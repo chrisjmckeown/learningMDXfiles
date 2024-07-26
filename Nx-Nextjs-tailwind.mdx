@@ -1,173 +1,176 @@
 ---
-title: 'Nx and Nextjs'
-excerpt: 'Combining Nextjs and Tailwind.'
-date: '2023-04-10'
-url: 'https://egghead.io/lessons/egghead-introduction-to-architecting-an-extensible-digital-garden-with-next-js-tailwind-and-nx'
+title: "Nx and Nextjs"
+excerpt: "Combining Nextjs and Tailwind."
+date: "2023-04-10"
+source:
+  [
+    "https://egghead.io/lessons/egghead-introduction-to-architecting-an-extensible-digital-garden-with-next-js-tailwind-and-nx",
+  ]
 author:
-    name: Chris McKeown
-tags: ['Nextjs', 'Nx']
+  name: Chris McKeown
+tags: ["Nextjs", "Nx", "code"]
 ---
 
 # Introduction
 
--   Nextjs
--   Tailwind
--   NX
--   Cypress
--   Storybook
+- Nextjs
+- Tailwind
+- NX
+- Cypress
+- Storybook
 
 # Create Nx project/workspace
 
--   Below will change as the version of Nx evolve
--   `npx create-nx-workspace name --packageManager=yarn`
--   Which stack do you want to use? `React`
--   What framework would you like to use? `Next.js`
--   Standalone project or integrated monorepo? `Integrated Monorepo:  Nx creates a monorepo that contains multiple projects.`
--   Application name `first-project-name`
--   Would you like to use the App Router (recommended)? `Yes`
--   Default stylesheet format `CSS`
--   Enable distributed caching to make your CI faster `Yes`
--   Then the install will happen.
+- Below will change as the version of Nx evolve
+- `npx create-nx-workspace name --packageManager=yarn`
+- Which stack do you want to use? `React`
+- What framework would you like to use? `Next.js`
+- Standalone project or integrated monorepo? `Integrated Monorepo:  Nx creates a monorepo that contains multiple projects.`
+- Application name `first-project-name`
+- Would you like to use the App Router (recommended)? `Yes`
+- Default stylesheet format `CSS`
+- Enable distributed caching to make your CI faster `Yes`
+- Then the install will happen.
 
 # Create a Next.js Web Application with Nx
 
--   `yarn nx g @nx/next:app my-new-app`
--   `yarn nx run help:serve` to spin up a particular app
-    -   go to http://localhost:4200/about
--   `yarn nx serve help`
--   can run serve directly if NX addin is installed
+- `yarn nx g @nx/next:app my-new-app`
+- `yarn nx run help:serve` to spin up a particular app
+  - go to http://localhost:4200/about
+- `yarn nx serve help`
+- can run serve directly if NX addin is installed
 
 # Create a new Next.js Page Component with Nx Generators
 
--   Can add pages using NX generator if installed
+- Can add pages using NX generator if installed
 
 # Understanding Next.js GetStaticProps
 
--   getStaticProps
--   getStaticPaths
+- getStaticProps
+- getStaticPaths
 
 # Understanding Next.js getStaticPaths
 
--   yarn nx g @nrwl/next:page --name="[slug]" --style=none --directory=articles --dry-run
--   http://localhost:4200/articles/Page1
+- yarn nx g @nrwl/next:page --name="[slug]" --style=none --directory=articles --dry-run
+- http://localhost:4200/articles/Page1
 
 # Setup Next.js with Tailwind in a Nx Workspace
 
--   yarn add tailwindcss@latest postcss@latest autoprefixer@latest
--   See help: https://nx.dev/recipes/other/using-tailwind-css-in-react
--   cd apps/help - because we are in a monorepo site
--   npx tailwindcss init -p
--   edit postcss.config.js
--   Also needed to apps/help/tailwind.config.js
-    -   tailwind V3 now only builds with the styles in use, so you need to specify the content location
--   load @tailwind modules into styles.css
+- yarn add tailwindcss@latest postcss@latest autoprefixer@latest
+- See help: https://nx.dev/recipes/other/using-tailwind-css-in-react
+- cd apps/help - because we are in a monorepo site
+- npx tailwindcss init -p
+- edit postcss.config.js
+- Also needed to apps/help/tailwind.config.js
+  - tailwind V3 now only builds with the styles in use, so you need to specify the content location
+- load @tailwind modules into styles.css
 
 # Configure Tailwind purging in a Nx Workspace
 
--   yarn nx build help
--   tailwind V3 no more need to purge, but can optimize in other ways https://tailwindcss.com/docs/optimizing-for-production
+- yarn nx build help
+- tailwind V3 no more need to purge, but can optimize in other ways https://tailwindcss.com/docs/optimizing-for-production
 
 # Configure Tailwind in a Nx Monorepo With Potentially Multiple Apps and Libs
 
--   Typography
-    -   yarn add @tailwindcss/typography
-    -   add @tailwindcss/typography to plugins to tailwind.config.js
--   Add global NX wide tailwind settings for each app to use
-    -   create a file at the root of the NX project, tailwind-workspace-preset.js
-    -   add common config here then import this to the app under presets
+- Typography
+  - yarn add @tailwindcss/typography
+  - add @tailwindcss/typography to plugins to tailwind.config.js
+- Add global NX wide tailwind settings for each app to use
+  - create a file at the root of the NX project, tailwind-workspace-preset.js
+  - add common config here then import this to the app under presets
 
 # Configure And Use TailwindCSS JIT Mode With Nx
 
--   this is no longer required in V3
--   Use getStaticPaths to Retrieve a List of Markdown Files to Render With Next.js
--   create an \_articles folder at root
--   create a POST_PATH variable
--   update getStaticPaths
--   Generate an Nx Library to Implement our Markdown Rendering for our Next.js App
-    -   Create a library with NX
--   Parse a Markdown Document With gray-matter
-    -   yarn add gray-matter --save-dev
--   Render Markdown With next-mdx-remote in our Next.js Page Component
-    -   yarn add next-mdx-remote --save-dev
--   Embed React Components in our Markdown with MDX in a Next.js App
-    -   yarn nx g @nrwl/react:library mdx-elements --directory=shared
--   Use React Components for Native HTML Tags with MDX and Next.js
--   Dynamically Loading React Components with next-mdx-remote and Next.js Dynamic imports
--   Using Environment Variables with Next.js and Nx
--   Add Fast Refresh Support to our MDX Files with Nx Support for Custom Next.js Servers
-    -   yarn add chokidar
--   Scaffold a New Blog Post Article Automatically With Nx Workspace Generators
-    -   customServerTarget fails to run
--   Scaffold a New Blog Post Article Automatically With Nx Workspace Generators
-    -   yarn nx g @nrwl/workspace:workspace-generator new-article
--   Run an Nx Generator With the Nx Console VSCode Extension
-    -   yarn nx workspace-generator new-article "my generated article" --author=test
--   Run an Nx Generator With the Nx Console VSCode Extension
--   Add prompts to an Nx Workspace Generator
+- this is no longer required in V3
+- Use getStaticPaths to Retrieve a List of Markdown Files to Render With Next.js
+- create an \_articles folder at root
+- create a POST_PATH variable
+- update getStaticPaths
+- Generate an Nx Library to Implement our Markdown Rendering for our Next.js App
+  - Create a library with NX
+- Parse a Markdown Document With gray-matter
+  - yarn add gray-matter --save-dev
+- Render Markdown With next-mdx-remote in our Next.js Page Component
+  - yarn add next-mdx-remote --save-dev
+- Embed React Components in our Markdown with MDX in a Next.js App
+  - yarn nx g @nrwl/react:library mdx-elements --directory=shared
+- Use React Components for Native HTML Tags with MDX and Next.js
+- Dynamically Loading React Components with next-mdx-remote and Next.js Dynamic imports
+- Using Environment Variables with Next.js and Nx
+- Add Fast Refresh Support to our MDX Files with Nx Support for Custom Next.js Servers
+  - yarn add chokidar
+- Scaffold a New Blog Post Article Automatically With Nx Workspace Generators
+  - customServerTarget fails to run
+- Scaffold a New Blog Post Article Automatically With Nx Workspace Generators
+  - yarn nx g @nrwl/workspace:workspace-generator new-article
+- Run an Nx Generator With the Nx Console VSCode Extension
+  - yarn nx workspace-generator new-article "my generated article" --author=test
+- Run an Nx Generator With the Nx Console VSCode Extension
+- Add prompts to an Nx Workspace Generator
 
 # Configure Storybook for your React Based Nx Workspace Library
 
--   yarn nx generate @nrwl/react:library ui --directory=shared --no-interactive
--   yarn nx generate @nrwl/react:component topic-button --style=css --project=shared-ui
--   yarn nx generate @nrwl/react:storybook-configuration shared-ui --cypressDirectory=storeybook-e2e --no-interactive
-    -   root level .storybook is no longer created
+- yarn nx generate @nrwl/react:library ui --directory=shared --no-interactive
+- yarn nx generate @nrwl/react:component topic-button --style=css --project=shared-ui
+- yarn nx generate @nrwl/react:storybook-configuration shared-ui --cypressDirectory=storeybook-e2e --no-interactive
+  - root level .storybook is no longer created
 
 # Configure Tailwind for your Storybook Setup in an Nx Workspace
 
--   cd libs/shared/ui
--   npx tailwindcss init -p
--   copy tailwind settings from other app
+- cd libs/shared/ui
+- npx tailwindcss init -p
+- copy tailwind settings from other app
 
 # Develop React Components in Isolation with Storybook and Nx
 
--   Something is broken with the SVG, need to come back to this
+- Something is broken with the SVG, need to come back to this
 
 # Share React Components in Next.js Applications with Nx Workspace Libraries
 
--   yarn nx g @nrwl/next:page --name=topics --project=help
+- yarn nx g @nrwl/next:page --name=topics --project=help
 
 # Write e2e Tests for our Next.js Application with Nx and Cypress
 
--   yarn nx e2e help-e2e --watch
+- yarn nx e2e help-e2e --watch
 
 # Write Cypress Tests for our React Storybook Components with Nx
 
--   yarn nx e2e storeybook-e2e-ui-e2e --watch
+- yarn nx e2e storeybook-e2e-ui-e2e --watch
 
 # Export a Next.js Application with Nx
 
--   yarn nx export help
--   cd dist/apps/help/exported/
--   npx http-server
-    -   http://127.0.0.1:8080/
+- yarn nx export help
+- cd dist/apps/help/exported/
+- npx http-server
+  - http://127.0.0.1:8080/
 
 # Setup Vercel to Deploy an Nx Based Next.js Application
 
--   yarn nx build help --prod
--   Create a vercel account
--   Connect to github
--   select the project
--   for Build and Output settings:
-    -   Build Command: npx nx build help --prod
-    -   Output directory: dist/app/site/.next
+- yarn nx build help --prod
+- Create a vercel account
+- Connect to github
+- select the project
+- for Build and Output settings:
+  - Build Command: npx nx build help --prod
+  - Output directory: dist/app/site/.next
 
 # Only Build What Changed with Nx Affected Commands
 
--   yarn nx g @nrwl/react:application reactapp
--   yarn nx dep-graph
--   yarn nx affected:dep-graph --base="branchname" - will show affected linked apps, libs etc
--   yarn nx affected:build --base="branchname", will only build what has been affected
+- yarn nx g @nrwl/react:application reactapp
+- yarn nx dep-graph
+- yarn nx affected:dep-graph --base="branchname" - will show affected linked apps, libs etc
+- yarn nx affected:build --base="branchname", will only build what has been affected
 
 # Register our Markdown Articles with the Nx Dependency Graph
 
--   can add a project.json to any folder for Nx to track.
--   add "implicitDependencies": ["help-articles" ] to any other project.json files that should be affected and trigger a build
+- can add a project.json to any folder for Nx to track.
+- add "implicitDependencies": ["help-articles" ] to any other project.json files that should be affected and trigger a build
 
 # Only Deploy to Vercel What has Been Affected Using Nx
 
--   yarn nx affected:dep-graph --base="branchname"
--   yarn nx affected:apps --plain --base="branchname"
--   changed since time of recording to https://nx.dev/recipes/other/deploy-nextjs-to-vercel#skipping-build-if-the-application-is-not-affected
+- yarn nx affected:dep-graph --base="branchname"
+- yarn nx affected:apps --plain --base="branchname"
+- changed since time of recording to https://nx.dev/recipes/other/deploy-nextjs-to-vercel#skipping-build-if-the-application-is-not-affected
 
--   Something is broken with the SVG, need to come back to this, only failing with storybook
--   Only accepting .mdx, need to extend to .md
+- Something is broken with the SVG, need to come back to this, only failing with storybook
+- Only accepting .mdx, need to extend to .md

@@ -1,0 +1,76 @@
+---
+title: "Feature flags or feature toggles"
+excerpt: "Learnings from feature flags, tips and tricks."
+date: "2022-08-10"
+source:
+  [
+    "https://www.youtube.com/watch?v=c8KgKTgyFUE",
+    "https://www.youtube.com/watch?v=AD8LSdy7b2s",
+  ]
+author:
+  name: Chris McKeown
+tags: ["feature flags", "feature toggles", "flags", "toggles", "general"]
+
+url-1:
+---
+
+<h1 align="center">Feature flags or feature toggles</h1>
+
+---
+
+# [Definition](https://www.youtube.com/watch?v=c8KgKTgyFUE)
+
+- If the feature flag is on do this else this
+- Zero downtime
+- Code is allows deployed to prod just might not be turned on
+- Simplest on/off
+- Or more flexible depending on region, or groups of users etc.
+- Controlling the feature flags
+  - In code: bad
+  - In config
+  - Our remotely like
+    - [Azure App Configuration](https://docs.microsoft.com/en-us/azure/azure-app-configuration/overview)
+    - [LaunchDarkly](https://learn.launchdarkly.com/)
+    - [AWS AppConfig Feature Flags](https://aws.amazon.com/blogs/mt/using-aws-appconfig-feature-flags/)
+
+# [Standards](https://www.youtube.com/watch?v=AD8LSdy7b2s)
+
+- Deploy vs Rollout, decouple
+- Accountability
+  - Tracked in a shared place
+  - Alerting set up on monitoring/metrics
+- Procedure
+  - Who manages the process?
+    - Release team?
+    - PM?
+    - Engineering manager?
+  - WIP limit
+    - Limit the number of feature flags in the code base at any one time.. 2?
+    - Consider feature flags _work in flight_
+    - How much work in flight do you want to have at any given point?
+    - The people feeling the consequences of tech debt are not always the people prioritizing the work
+- Feature flag checklist
+  - what are the must do's
+  - What tracking do they need?
+  - Whats the procedure they need to follow?
+  - What kind of changes should not be behind a feature flag? destructive database changes
+- Lifespan
+  - Short
+  - Long
+  - How long does your system take to get meaningful results?
+- Expired Feature
+  - Feature is not complete until the flag is removed
+  - Prioritize removing flags as part of the work of the feature
+  - Retire flags which have expired or unused
+- How do I make sure expired features are removed?
+  - Feature stand-up
+  - Ticket flag removal when the feature is created
+  - Write the PR to take out which it goes in
+- Tips
+  - Try to keep flags
+    - As small as possible
+    - As short lived as possible
+    - As top level as possible
+      - "Bubble up" feature flags to the highest point in the code they can live
+
+# [LaunchDarkly](https://www.youtube.com/watch?v=pwA_Ehp2SMY)

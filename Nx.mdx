@@ -1,17 +1,18 @@
 ---
-title: 'Nx'
-excerpt: 'Nx Monorepo learnings.'
-date: '2023-06-13'
+title: "Nx"
+excerpt: "Nx Monorepo learnings."
+date: "2023-06-13"
+source: []
 author:
-    name: Chris McKeown
-tags: ['NX']
+  name: Chris McKeown
+tags: ["NX"]
 ---
 
 # E2E Cypress test
 
--   yarn nx e2e waiver-e2e
+- yarn nx e2e waiver-e2e
 
 ## Shared e2e packages
 
--   Generate a shared JS package
-    -   nx generate @nx/js:library --name=cypress-commands --directory=shared --no-interactive
+- Generate a shared JS package
+  - nx generate @nx/js:library --name=cypress-commands --directory=shared --no-interactive

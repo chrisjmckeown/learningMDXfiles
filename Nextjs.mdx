@@ -1,102 +1,103 @@
 ---
-title: 'Nextjs'
-excerpt: 'Takeaway learnings from Nextjs courses.'
-date: '2023-06-13'
+title: "Nextjs"
+excerpt: "Takeaway learnings from Nextjs courses."
+date: "2023-06-13"
+source: []
 author:
-    name: Chris McKeown
-tags: ['Nextjs']
+  name: Chris McKeown
+tags: ["Nextjs"]
 ---
 
 # Nextjs 13
 
 # Crash Course (Why You Should Use Next?)
 
--   React framework - even React is promoting a framework
--   New stabel app Router
-    -   each folder is a path
--   Fullstack with API
--   Server side and client side compoments together
--   SSR and CSR
--   Nextjs Optimizations
-    -   Images
-    -   Pre loading
+- React framework - even React is promoting a framework
+- New stabel app Router
+  - each folder is a path
+- Fullstack with API
+- Server side and client side compoments together
+- SSR and CSR
+- Nextjs Optimizations
+  - Images
+  - Pre loading
 
 # Installation
 
--   `npx create-next@latest .` dot means create in the current folder
+- `npx create-next@latest .` dot means create in the current folder
 
-    -   Typescript
-    -   ESLint
-    -   Tailwind
-    -   scr/directory
-    -   App Router
-    -   import alia
+  - Typescript
+  - ESLint
+  - Tailwind
+  - scr/directory
+  - App Router
+  - import alia
 
-        s
+    s
 
--   `yarn run dev` or `npm run dev`
+- `yarn run dev` or `npm run dev`
 
 # Folder Structure
 
 ## Public
 
--   all public Images
+- all public Images
 
 ## App
 
 # Routing Tutorial (App Router)
 
--   `ap_articles/Nextjs.mdxp` is the home folder
--   create a folder structure for tree of website
--   use square brackets for dynamic pages
--   use brackets to group folders, will not take it as a route
+- `ap_articles/Nextjs.mdxp` is the home folder
+- create a folder structure for tree of website
+- use square brackets for dynamic pages
+- use brackets to group folders, will not take it as a route
 
 # Layouts and Components
 
--   make a folder with the name of the navigation and page.tsx file as the react file
--   rafc react function Component
+- make a folder with the name of the navigation and page.tsx file as the react file
+- rafc react function Component
 
 ## Layouts
 
--   Parent component that other pages use automatically
--   Can create layout.tsx for sub routes too
+- Parent component that other pages use automatically
+- Can create layout.tsx for sub routes too
 
 ## Components
 
--   Are named as normal, i.e. not page.tsx as they are normal Components
+- Are named as normal, i.e. not page.tsx as they are normal Components
 
 ## Loading
 
--   Add a loading.tsx to a folder this will automatically be used if a page requires it.
+- Add a loading.tsx to a folder this will automatically be used if a page requires it.
 
 ## Error
 
--   Much like Loading, Error.jsx will automatically be used by nextjs when/if required.
+- Much like Loading, Error.jsx will automatically be used by nextjs when/if required.
 
 # Rendering Explained (Server side and Client side)
 
--   By default all components use Server side rendering, add "use client" directive at the top of the file. As soon use you use state in a file you will be prompted to add "use client"
--   SSR
+- By default all components use Server side rendering, add "use client" directive at the top of the file. As soon use you use state in a file you will be prompted to add "use client"
+- SSR
 
-    -   Not user interactive, requires CSR
-    -   Server returns html not javascript
-    -   Search engines can trawl through pages
-    -   Better for older slower devices
+  - Not user interactive, requires CSR
+  - Server returns html not javascript
+  - Search engines can trawl through pages
+  - Better for older slower devices
 
--   Console.log SSR will console log to the terminal
--   Console.log CSR will console log to the browser
+- Console.log SSR will console log to the terminal
+- Console.log CSR will console log to the browser
 
 # Styling (Global and Module CSS)
 
--   global.css for global styling, else
--   add page.module.css to the subfolders for sub styling
--   next creates unique class names when compiled
+- global.css for global styling, else
+- add page.module.css to the subfolders for sub styling
+- next creates unique class names when compiled
 
 # Image Explained
 
--   Image via next lazy loading and optimizations, modifies it under the hood
--   Must either add width={15} and height={15} to the Image or fill={true} to the container, this is due to lazy loading
--   External images urls must be added to next.config.js
+- Image via next lazy loading and optimizations, modifies it under the hood
+- Must either add width={15} and height={15} to the Image or fill={true} to the container, this is due to lazy loading
+- External images urls must be added to next.config.js
 
 ```
 const nextConfig = {
@@ -117,12 +118,12 @@ const nextConfig = {
 
 # Dark/Light Mode Tutorial
 
--   \*/}
+- \*/}
 
 # Context API Tutorial (App Router)
 
--   createContext
--   wrap in a provider
+- createContext
+- wrap in a provider
 
 ```
 return (
@@ -132,17 +133,17 @@ return (
 );
 ```
 
--   create a hook to pass Context
+- create a hook to pass Context
 
 # Data Fetching Explained (Static, Dynamic)
 
--   cache: 'force-cache' Static Data fetching, is the default
--   `{ next: { revalidate: 10 } }) Revalidating data, at a set period 10 seconds in example`
--   cache: "no-store", Dynamic data fetching, when data is changing all the time
+- cache: 'force-cache' Static Data fetching, is the default
+- `{ next: { revalidate: 10 } }) Revalidating data, at a set period 10 seconds in example`
+- cache: "no-store", Dynamic data fetching, when data is changing all the time
 
 # How to Fetch Data on the Client Side? (SWR Tutorial)
 
--   SWR, similar to react query handles state and mutates state, along with loading and error handlers to remove the need to manually build and use useEffect.
+- SWR, similar to react query handles state and mutates state, along with loading and error handlers to remove the need to manually build and use useEffect.
 
 ```
 import useSWR from 'swr'
@@ -213,4 +214,4 @@ const data = getData(params.category);
 
 # SWR Mutation_articles/Nextjs.mdx
 
--   \*/}
+- \*/}

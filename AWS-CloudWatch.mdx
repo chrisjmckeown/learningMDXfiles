@@ -1,11 +1,14 @@
 ---
-title: 'CloudWatch'
-excerpt: 'Learnings from AWS CloudWatch, tips and tricks.'
-date: '2023-10-17'
-source: 'https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html'
+title: "CloudWatch"
+excerpt: "Learnings from AWS CloudWatch, tips and tricks."
+date: "2023-10-17"
+source:
+  [
+    "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html",
+  ]
 author:
-    name: Chris McKeown
-tags: ['AWS', 'CloudWatch']
+  name: Chris McKeown
+tags: ["AWS", "CloudWatch"]
 ---
 
 # CloudWatch - Log Insights
@@ -53,13 +56,13 @@ fields @timestamp, @message, @logStream, @log
 
 where:
 
--   fields: to show specific fields in query results.
--   parse: to extract data from a log field and create an extracted field that you can process in your query.
--   filter: to get log events that match one or more conditions.
--   sort: display log events in ascending (asc) or descending (desc) order by a specified field.
--   limit: specify the number of log events that you want your query to return.
+- fields: to show specific fields in query results.
+- parse: to extract data from a log field and create an extracted field that you can process in your query.
+- filter: to get log events that match one or more conditions.
+- sort: display log events in ascending (asc) or descending (desc) order by a specified field.
+- limit: specify the number of log events that you want your query to return.
 
 Note:
 
--   if @message {"level": "error","message": "an error message"} the double quotes need to be used to wrap the variable in the query, wrapping in single quote was yield no results.
--   getting second item out of message was not working, so messageOut above takes the remainder
+- if @message {"level": "error","message": "an error message"} the double quotes need to be used to wrap the variable in the query, wrapping in single quote was yield no results.
+- getting second item out of message was not working, so messageOut above takes the remainder
